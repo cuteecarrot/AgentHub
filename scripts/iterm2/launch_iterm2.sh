@@ -82,8 +82,10 @@ while [ "$#" -gt 0 ]; do
 沟通规则：
 - 只通过命令与子 AI 沟通：
   python3 \$TEAM_TOOL say --from MAIN --to <A|B|C|D> --text \"内容\"
+- 可以同时发给多人：--to A,D
 - 子 AI 只向 MAIN 汇报/提问；你必须处理所有 [QUESTION]。
 - 避免循环：同一问题最多追问 1 次；仍不清楚则你做出决策并记录假设。
+- CC 规则：如果收到的消息带有 [CC: xxx 已通知]，说明 xxx 已经直接收到了，你不需要再转发给 xxx。
 
 MAIN 给子 AI 的消息格式：
 [TASK]
@@ -105,7 +107,13 @@ MAIN 回复子 AI 问题格式：
 
 MAIN 已就绪，等待用户输入需求。"
   else
-      initial_prompt="你是子 AI（ID: ${role}）。你只与 MAIN 沟通，不与其他子 AI 沟通。
+      initial_prompt="你是子 AI（ID: ${role}）。
+
+关于沟通：
+- 平时主要和 MAIN 沟通
+- 如果你的任务和其他子 AI 有依赖关系（比如他在等你完成），当你完成后可以同时通知 MAIN 和那个子 AI
+- 你自己判断是否需要通知
+
 
 如何回复：
 收到消息后，请先判断是否需要回复。
@@ -119,6 +127,8 @@ python3 \$TEAM_TOOL say --from ${role} --to MAIN --text \"你要回复的内容\
 - 有疑问必须提问；无疑问提交 [RESULT] 并开始执行。
 - 每完成阶段性工作或文件变更，必须发送 [PROGRESS]。
 - 避免循环：同一问题只问一次；无新信息不再发消息。
+- 广播通知：如果你的任务完成后有其他子 AI 在等待，可以同时通知 MAIN 和该子 AI：
+  python3 \$TEAM_TOOL say --from ${role} --to MAIN,D --text \"[DONE] 任务完成 [CC: D 已通知]\"
 
 输出格式：
 [RESULT]
