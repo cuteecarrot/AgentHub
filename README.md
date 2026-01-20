@@ -1,255 +1,309 @@
-# AgentHub - 多 AI 协作开发框架
+# AgentHub - Multi-Agent Collaboration Framework
 
-> 让多个 AI Agent 通过消息协议协同工作，像人类团队一样完成复杂软件开发任务
+<div align="center">
+
+> **Orchestrate multiple AI Agents to work together like a human team**
+> Complete complex software development tasks through reliable messaging protocols
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![GitHub stars](https://img.shields.io/github/stars/Dmatut7/AgentHub?style=social)](https://github.com/Dmatut7/AgentHub/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/Dmatut7/AgentHub?style=social)](https://github.com/Dmatut7/AgentHub/network)
+[![GitHub issues](https://img.shields.io/github/issues/Dmatut7/AgentHub)](https://github.com/Dmatut7/AgentHub/issues)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/Dmatut7/AgentHub/pulls)
+
+[Features](#-features) | [Quick Start](#-quick-start) | [Architecture](#-architecture) | [Examples](#-use-cases) | [Contributing](#-contributing)
+
+</div>
 
 ---
 
-## 项目简介
+## What is AgentHub?
 
-AgentHub 是一个**开源的多 AI 协作框架**，通过消息路由架构实现多个 AI Agent 之间的可靠通信与协同工作。只需一条命令，即可启动包含 1 个主控 AI（MAIN）和 4 个执行 AI（A/B/C/D）的完整团队，像管理人类团队一样管理 AI 协作开发。
+**AgentHub** is an open-source **Multi-Agent Orchestration Framework** that enables reliable communication and coordinated work between multiple AI Agents through a message routing architecture.
 
-### 为什么选择 AgentHub？
+With a **single command**, launch a complete AI development team with:
+- **1 Coordinator Agent (MAIN)** - task planning, coordination, and review
+- **4 Executor Agents (A/B/C/D)** - parallel task execution
 
-| 传统 AI 开发 | AgentHub |
-|-------------|----------|
-| 单个 AI 独立工作 | **多 AI 并行协作** |
-| 无法分工 | **任务自动拆分分配** |
-| 沟通成本高 | **标准化消息协议** |
-| 状态易丢失 | **持久化 + 崩溃恢复** |
-| 难以追踪进度 | **完整任务状态管理** |
+Manage AI collaborative development just like managing a human team.
 
 ---
 
-## 核心特性
+## Why AgentHub?
 
-### 🚀 一键启动 AI 团队
+| Traditional AI Development | AgentHub |
+|:---------------------------:|:--------:|
+| Single AI working alone | **Multi-Agent Parallel Collaboration** |
+| No division of labor | **Automatic Task Breakdown & Assignment** |
+| High communication overhead | **Standardized Messaging Protocol** |
+| State easily lost | **Persistence + Crash Recovery** |
+| Hard to track progress | **Complete Task State Management** |
+
+---
+
+## Features
+
+### 🚀 One-Command Team Launch
+
 ```bash
 ./scripts/start_team.sh
 ```
-- 自动启动 Router（消息中心）
-- 打开 5 个独立终端窗口
-- 生成标准项目文档模板
-- 注入 AI 角色提示词
 
-### 🔄 可靠的消息传递
-- **ACK 确认机制** - 消息投递和应用层双重确认
-- **自动重试** - 指数退避重试策略
-- **超时处理** - 自动检测并处理超时任务
-- **幂等保证** - 消息去重，避免重复执行
+- Auto-start Router (message hub)
+- Open 5 independent terminal windows
+- Generate standard documentation templates
+- Inject AI role prompts
 
-### 📋 完整的协作协议
+### 🔄 Reliable Message Delivery
+
+- **ACK Confirmation** - Dual acknowledgment at delivery and application layer
+- **Auto Retry** - Exponential backoff retry strategy
+- **Timeout Handling** - Automatic timeout detection and handling
+- **Idempotency** - Message deduplication to avoid duplicate execution
+
+### 📋 Complete Collaboration Protocol
+
 ```
-review (审查) → assign (分配) → execute (执行) → verify (验收)
+review (review) -> assign (assign) -> execute (execute) -> verify (verify)
 ```
-- 标准化的 AI-to-AI 通信协议
-- 支持文档审查、任务分配、问题澄清、结果验收
-- 可追溯的消息历史和任务状态
 
-### 💾 状态持久与恢复
-- 消息日志（JSONL 格式）
-- Inbox 状态持久化
-- 崩溃后自动恢复
-- 支持 session/epoch 管理
+Standardized AI-to-AI communication protocol supporting:
+- Document/code review
+- Task assignment
+- Q&A coordination
+- Result verification
 
-### 🖥️ 多终端支持
-- macOS Terminal.app
-- iTerm2
-- 计划支持 tmux
+### 💾 State Persistence & Recovery
 
-### 🔧 灵活配置
-- 可自定义 Agent 数量
-- 支持不同 AI CLI 工具（Codex、Claude Code 等）
-- 环境变量配置
+- Message logs (JSONL format)
+- Inbox state persistence
+- Auto-recovery after crash
+- Session/epoch management support
+
+### 🔧 Flexible Configuration
+
+- Customizable agent count
+- Support for different AI CLI tools (Codex, Claude Code, etc.)
+- Environment variable configuration
 
 ---
 
-## 架构设计
+## Demo
 
-![架构图](images/architecture.png)
+> Watch how AgentHub orchestrates 5 AI agents working together
 
-```
-┌─────────────────────────────────────────────────────┐
-│                    Router Server                    │
-│         (消息路由 / 状态管理 / 可靠投递)              │
-└─────────────┬───────────────────────────────────────┘
-              │
-    ┌─────────┼─────────┬─────────┬─────────┐
-    │         │         │         │         │
-┌───▼───┐ ┌──▼───┐ ┌──▼───┐ ┌──▼───┐ ┌──▼───┐
-│ MAIN  │ │  A   │ │  B   │ │  C   │ │  D   │
-│ 主控   │ │ 执行  │ │ 执行  │ │ 执行  │ │ 执行  │
-│ 协调者  │ │ Agent │ │ Agent │ │ Agent │ │ Agent │
-└───────┘ └──────┘ └──────┘ └──────┘ └──────┘
-```
+[![Demo Video](https://img.shields.io/badge/Watch-Demo-red?style=for-the-badge&logo=youtube)](https://github.com/Dmatut7/AgentHub#demo)
 
-**角色职责**：
-- **MAIN** - 协调者、文档作者、任务分配者、问题解答者
-- **A/B/C/D** - 任务执行者、文档审查者
+*Coming soon: Video demonstration of multi-agent collaboration*
 
 ---
 
-## 快速开始
+## Architecture
 
-### 前置条件
+![Architecture](images/architecture.png)
 
-- macOS 系统（Linux 支持计划中）
-- Python 3.8+
-- Terminal.app 或 iTerm2
-- AI CLI 工具（如 Codex、Claude Code 等）
+```
+                    Router Server
+        (Message Routing / State Management / Delivery)
 
-### 安装
+                    │
+    ┌───────┬───────┼───────┬───────┐
+    │       │       │       │       │
+┌───▼───┐ ┌─▼───┐ ┌─▼───┐ ┌─▼───┐ ┌─▼───┐
+│ MAIN  │ │  A  │ │  B  │ │  C  │ │  D  │
+│Coord. │ │Exec │ │Exec │ │Exec │ │Exec │
+│Agent  │ │Agent│ │Agent│ │Agent│ │Agent│
+└───────┘ └─────┘ └─────┘ └─────┘ └─────┘
+```
+
+**Role Responsibilities:**
+| Agent | Role | Responsibilities |
+|:-----:|:-----:|:------------------|
+| **MAIN** | Coordinator | Task planning, document writing, problem solving, final review |
+| **A/B/C/D** | Executors | Task execution, document review, feedback collection |
+
+---
+
+## Message Protocol
+
+AgentHub defines a complete AI-to-AI communication protocol:
+
+| Message Type | Direction | Purpose |
+|:------------:|:--------:|:---------|
+| `review` | MAIN->Members | Review documents/code |
+| `report` | Members->MAIN | Feedback review results |
+| `assign` | MAIN->Members | Assign tasks |
+| `clarify` | Members->MAIN | Ask questions |
+| `answer` | MAIN->Members | Answer questions |
+| `verify` | MAIN->Members | Verify changes |
+| `done` | Members->MAIN | Task complete |
+| `fail` | Members->MAIN | Task failed |
+
+See [docs/main-members-workflow.md](docs/main-members-workflow.md) for complete protocol specification.
+
+---
+
+## Quick Start
+
+### Prerequisites
+
+- **macOS** (Linux support planned)
+- **Python 3.8+**
+- **Terminal.app or iTerm2**
+- **AI CLI tool** (Codex, Claude Code, or compatible)
+
+### Installation
 
 ```bash
-# 克隆仓库
+# Clone repository
 git clone https://github.com/Dmatut7/AgentHub.git
 cd AgentHub
 ```
 
-### 启动 AI 团队
+### Launch AI Team
 
 ```bash
-# 在你的项目目录下启动
+# Start in your project directory
 ./scripts/start_team.sh
 ```
 
-系统会自动：
-1. 启动 Router（默认端口 8765）
-2. 生成标准文档模板
-3. 打开 5 个终端窗口
-
-### 工作流程
-
-![工作流程图](images/workflow.png)
-
-```
-┌─────────────┐
-│  用户提出需求  │
-└──────┬──────┘
-       ▼
-┌─────────────┐     ┌─────────────┐
-│ MAIN 确认   │ ──▶ │ 编写技术文档  │
-└──────┬──────┘     └──────┬──────┘
-       ▼                    ▼
-┌─────────────┐     ┌─────────────┐
-│ 成员审查文档  │ ◀── │ 发送 review │
-└──────┬──────┘     └─────────────┘
-       ▼
-┌─────────────┐     ┌─────────────┐
-│ 汇总问题     │ ──▶ │ MAIN 修改文档 │
-└──────┬──────┘     └──────┬──────┘
-       ▼                    ▼
-┌─────────────┐     ┌─────────────┐
-│ verify 确认 │ ──▶ │ 无问题确认    │
-└──────┬──────┘     └──────┬──────┘
-       ▼                    ▼
-┌─────────────┐     ┌─────────────┐
-│ 分配任务     │ ──▶ │ 并行开发     │
-└──────┬──────┘     └──────┬──────┘
-       ▼                    ▼
-┌─────────────┐     ┌─────────────┐
-│ 沟通协调     │ ◀── │ clarify 提问 │
-└──────┬──────┘     └──────┬──────┘
-       ▼                    ▼
-┌─────────────┐     ┌─────────────┐
-│ 汇总结果     │ ◀── │ done 完成任务 │
-└─────────────┘     └─────────────┘
-```
+The system will automatically:
+1. Start Router (default port 8765)
+2. Generate standard documentation templates
+3. Open 5 terminal windows for each agent
 
 ---
 
-## 目录结构
+## Use Cases
+
+### 1. Code Review Pipeline
+```bash
+# MAIN writes code -> A/B/C/D review in parallel -> MAIN consolidates feedback
+```
+
+### 2. Parallel Feature Development
+```bash
+# MAIN breaks down feature -> A/B/C/D implement components -> MAIN integrates
+```
+
+### 3. Documentation Generation
+```bash
+# MAIN outlines -> A/B/C/D write sections -> MAIN finalizes
+```
+
+### 4. Bug Hunt & Fix
+```bash
+# MAIN describes bug -> A/B/C/D investigate & propose fixes -> MAIN verifies
+```
+
+See [EXAMPLES.md](EXAMPLES.md) for detailed use cases.
+
+---
+
+## Directory Structure
 
 ```
 AgentHub/
-├── scripts/               # 启动脚本
-│   ├── start_team.sh     # 一键启动
-│   ├── stop_team.sh      # 停止系统
-│   └── status_team.sh    # 查看状态
+├── scripts/               # Launch scripts
+│   ├── start_team.sh     # One-command launch
+│   ├── stop_team.sh      # Stop system
+│   └── status_team.sh    # Check status
 ├── src/
-│   ├── api/              # HTTP 服务器
-│   ├── cli/              # 命令行工具 (team.py)
-│   ├── router/           # 消息路由核心逻辑
-│   ├── protocol/         # 消息协议定义
-│   ├── state/            # 状态管理
-│   ├── storage/          # 持久化存储 (JSONL)
-│   └── launcher/         # 终端启动器
-├── prompts/              # AI 提示词模板
-├── docs/                 # 设计文档
-│   ├── design.md         # 系统架构设计
-│   └── main-members-workflow.md  # 协议规范
+│   ├── api/              # HTTP server
+│   ├── cli/              # CLI tools
+│   ├── router/           # Message routing core
+│   ├── protocol/         # Protocol definitions
+│   ├── state/            # State management
+│   ├── storage/          # Persistent storage
+│   └── launcher/         # Terminal launcher
+├── prompts/              # AI prompt templates
+├── doc/                  # Documentation templates
+├── docs/                 # Design documents
+│   ├── design.md         # System architecture
+│   └── main-members-workflow.md  # Protocol spec
 └── README.md
 ```
 
 ---
 
-## 消息协议
-
-![协议流程图](images/protocol.png)
-
-AgentHub 定义了一套完整的 AI-to-AI 通信协议：
-
-| 消息类型 | 方向 | 用途 |
-|---------|------|------|
-| `review` | MAIN→Members | 审查文档/代码 |
-| `report` | Members→MAIN | 反馈审查结果 |
-| `assign` | MAIN→Members | 分配任务 |
-| `clarify` | Members→MAIN | 询问问题 |
-| `answer` | MAIN→Members | 解答问题 |
-| `verify` | MAIN→Members | 验证修改 |
-| `done` | Members→MAIN | 任务完成 |
-| `fail` | Members→MAIN | 任务失败 |
-
-完整协议规范请参阅 [docs/main-members-workflow.md](docs/main-members-workflow.md)
-
----
-
-## 常用命令
+## Common Commands
 
 ```bash
-# 启动系统
+# Start system
 ./scripts/start_team.sh
 
-# 查看状态
+# Check status
 ./scripts/status_team.sh
 
-# 发送消息
-python3 src/cli/team.py say --from MAIN --to A --text "开始任务"
+# Send message
+python3 src/cli/team.py say --from MAIN --to A --text "Start task"
 
-# 查看消息队列
+# View message queue
 curl http://127.0.0.1:8765/status | python3 -m json.tool
 
-# 停止系统
+# Stop system
 ./scripts/stop_team.sh
 ```
 
 ---
 
-## 配置选项
+## Configuration
 
-| 环境变量 | 说明 | 默认值 |
-|---------|------|--------|
-| `TERMINAL_ADAPTER` | 终端类型 | `terminal` |
-| `CODEX_PATH` | AI CLI 路径 | `codex` |
+| Environment Variable | Description | Default |
+|:--------------------|:------------|:--------|
+| `TERMINAL_ADAPTER` | Terminal type (`terminal`/`iterm`) | `terminal` |
+| `CODEX_PATH` | AI CLI executable path | `codex` |
 
 ---
 
-## 文档
+## Contributing
 
-- [设计文档](docs/design.md) - 系统架构设计
-- [协议规范](docs/main-members-workflow.md) - 消息协议详解
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details.
+
+Quick steps:
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
+
+## Documentation
+
+- [Design Doc](docs/design.md) - System architecture
+- [Protocol Spec](docs/main-members-workflow.md) - Message protocol details
+- [Examples](EXAMPLES.md) - Use cases and examples
+- [Contributing](CONTRIBUTING.md) - Contribution guide
+- [Support](SUPPORT.md) - Help & troubleshooting
+- [Changelog](CHANGELOG.md) - Version history
+
+---
+
+## Roadmap
+
+- [ ] Linux support
+- [ ] Windows support
+- [ ] Web dashboard for monitoring
+- [ ] More AI model integrations (GPT-4, Claude, Gemini)
+- [ ] Plugin system for custom protocols
+- [ ] Distributed agent support (across machines)
 
 ---
 
 ## License
 
-MIT License © 2026 [Dmatut7](https://github.com/Dmatut7)
+[MIT License](LICENSE) © 2026 [Dmatut7](https://github.com/Dmatut7)
 
 ---
 
-**AgentHub** - 让 AI 团队协作更简单。
+<div align="center">
 
-📍 仓库地址: https://github.com/Dmatut7/AgentHub
-⭐ 如果这个项目对你有帮助，请给个 Star
+**AgentHub** - Making AI team collaboration simpler.
+
+[GitHub](https://github.com/Dmatut7/AgentHub) | [Issues](https://github.com/Dmatut7/AgentHub/issues) | [Discussions](https://github.com/Dmatut7/AgentHub/discussions)
+
+⭐ **If you find this project helpful, please give it a Star!**
+
+</div>
